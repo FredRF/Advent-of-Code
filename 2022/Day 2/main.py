@@ -42,7 +42,9 @@ def strategy_encryption() -> list:
 
 def result(play):
     play_1_translated = get_play_from_possible_plays(play[0])
-    play_2_decoded = strategy_decrypt(play[1])
+    ## Removed after day one. To run day one uncomment the line below and comment the next
+    #play_2_decoded = strategy_decrypt(play[1])
+    play_2_decoded = get_updated_strategy(play[1], play_1_translated)
     play_2_translated = get_play_from_possible_plays(play_2_decoded)
 
     if play[0] == play_2_decoded:
@@ -61,6 +63,21 @@ def strategy_decrypt(play: str) -> str:
         if strategy[p.upper()] == play.upper():
             return p
     raise Exception(f"The play {play} cannot be decrypted.")
+
+
+def get_updated_strategy(play: str, play_from_1: dict) -> str:
+    match play.upper():
+        case "X":
+            for p in possible_plays:
+                if p['letter'].upper() == play_from_1['wins'].upper():
+                    return p['letter'].upper()
+        case "Y":
+            return play_from_1['letter'].upper()
+        case "Z":
+            for p in possible_plays:
+                if p['letter'].upper() != play_from_1['letter'].upper() and p['letter'].upper() != play_from_1['wins'].upper():
+                    return p['letter'].upper()
+
 
 
 def get_play_from_possible_plays(play: str) -> dict:
